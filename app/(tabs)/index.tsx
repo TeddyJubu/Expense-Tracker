@@ -1,4 +1,4 @@
-import { View, ScrollView, RefreshControl, TouchableOpacity } from 'react-native';
+import { View, ScrollView, RefreshControl, TouchableOpacity, Alert } from 'react-native';
 import { useState, useMemo, useCallback } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
@@ -127,10 +127,7 @@ export default function HomeScreen() {
 
       {/* Floating Action Button */}
       <TouchableOpacity
-        onPress={() => {
-          // TODO: Navigate to add-expense modal
-          console.log('Add expense button pressed');
-        }}
+        onPress={() => Alert.alert('Add Expense', 'Feature coming soon!')}
         className="absolute bottom-24 right-6 bg-primary rounded-full p-4 shadow-lg active:opacity-80"
         style={{
           shadowColor: '#a3e635',
