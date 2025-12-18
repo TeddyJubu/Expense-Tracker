@@ -140,9 +140,9 @@ export default function AddExpenseScreen() {
 
                     {/* Amount Input */}
                     <View className="items-center my-8">
-                        <Typography variant="h2" className="text-secondary opacity-50 mb-2">$</Typography>
+                        <Typography variant="h2" className="text-muted-foreground mb-2">$</Typography>
                         <Input
-                            className="text-5xl font-bold text-center border-none bg-transparent h-20"
+                            className="text-5xl font-bold text-center border-none bg-transparent h-20 text-foreground"
                             placeholder="0.00"
                             keyboardType="decimal-pad"
                             autoFocus={!analyzing}
@@ -153,7 +153,7 @@ export default function AddExpenseScreen() {
                     </View>
 
                     {/* Category Selection */}
-                    <Typography variant="h3" className="mb-4">Category</Typography>
+                    <Typography variant="h3" className="mb-4 text-foreground font-semibold">Category</Typography>
                     <ScrollView horizontal showsHorizontalScrollIndicator={false} className="mb-8">
                         <View className="flex-row gap-3 pr-8">
                             {categories.map(cat => {
@@ -177,7 +177,7 @@ export default function AddExpenseScreen() {
                                             color={isSelected ? 'white' : colors.textSecondary}
                                         />
                                         <Typography
-                                            className={`ml-2 font-medium ${isSelected ? 'text-white' : 'text-secondary'}`}
+                                            className={`ml-2 font-medium ${isSelected ? 'text-background' : 'text-foreground'}`}
                                         >
                                             {cat.name}
                                         </Typography>
@@ -196,20 +196,20 @@ export default function AddExpenseScreen() {
                         containerClassName="mb-6"
                     />
 
-                    <View className="flex-row items-center justify-between mb-8 bg-surface p-4 rounded-xl border border-gray-100">
+                    <View className="flex-row items-center justify-between mb-8 bg-card p-4 rounded-xl border border-border">
                         <View className="flex-row items-center">
-                            <View className="w-10 h-10 rounded-full bg-blue-50 items-center justify-center mr-3">
-                                <Ionicons name="repeat" size={20} color="#0984E3" />
+                            <View className="w-10 h-10 rounded-full bg-primary/20 items-center justify-center mr-3">
+                                <Ionicons name="repeat" size={20} color="#a3e635" />
                             </View>
                             <View>
-                                <Typography variant="body" className="font-semibold">Recurring</Typography>
-                                <Typography variant="caption">Monthly subscription?</Typography>
+                                <Typography variant="body" className="font-semibold text-foreground">Recurring</Typography>
+                                <Typography variant="caption" className="text-muted-foreground">Monthly subscription?</Typography>
                             </View>
                         </View>
                         <Switch
                             value={isRecurring}
                             onValueChange={setIsRecurring}
-                            trackColor={{ false: '#E0E0E0', true: '#0984E3' }}
+                            trackColor={{ false: '#27272a', true: '#a3e635' }}
                         />
                     </View>
 

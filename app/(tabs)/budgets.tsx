@@ -127,7 +127,7 @@ export default function BudgetsScreen() {
               Create Budget
             </Text>
 
-            <Text style={[styles.label, { color: colors.text }]}>
+            <Text style={[styles.label, { color: colors.text, fontWeight: '600' }]}>
               Select Category
             </Text>
             <ScrollView
@@ -165,7 +165,7 @@ export default function BudgetsScreen() {
               ))}
             </ScrollView>
 
-            <Text style={[styles.label, { color: colors.text }]}>
+            <Text style={[styles.label, { color: colors.text, fontWeight: '600' }]}>
               Monthly Budget Amount
             </Text>
             <TextInput
@@ -178,7 +178,7 @@ export default function BudgetsScreen() {
                 }
               ]}
               placeholder="0.00"
-              placeholderTextColor={colors.textSecondary}
+              placeholderTextColor="#71717a"
               value={amount}
               onChangeText={setAmount}
               keyboardType="decimal-pad"

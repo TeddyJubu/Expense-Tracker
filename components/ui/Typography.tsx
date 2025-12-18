@@ -22,13 +22,13 @@ export const Typography: React.FC<TypographyProps> = ({
             case 'h2':
                 return "text-2xl font-bold text-foreground";
             case 'h3':
-                return "text-xl font-medium text-foreground";
+                return "text-xl font-semibold text-foreground";
             case 'body':
-                return "text-base text-muted-foreground";
+                return "text-base text-foreground";
             case 'caption':
-                return "text-sm text-muted-foreground opacity-70";
+                return "text-sm text-muted-foreground";
             case 'label':
-                return "text-xs font-bold uppercase tracking-wider text-muted-foreground";
+                return "text-xs font-semibold uppercase tracking-wider text-foreground";
             default:
                 return "text-base text-foreground";
         }

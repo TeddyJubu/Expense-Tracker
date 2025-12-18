@@ -36,7 +36,7 @@ export const Input: React.FC<InputProps> = ({
     return (
         <View className={`mb-4 ${containerClassName}`}>
             {label && (
-                <Typography variant="label" className="mb-2 ml-1 text-secondary">
+                <Typography variant="label" className="mb-2 ml-1 text-foreground font-semibold">
                     {label}
                 </Typography>
             )}
@@ -50,8 +50,8 @@ export const Input: React.FC<InputProps> = ({
                 {icon && <View className="mr-3">{icon}</View>}
 
                 <TextInput
-                    className={`flex-1 text-base text-primary font-sans ${className}`}
-                    placeholderTextColor="#9CA3AF"
+                    className={`flex-1 text-base text-foreground font-sans ${className}`}
+                    placeholderTextColor="#71717a"
                     onFocus={handleFocus}
                     onBlur={handleBlur}
                     {...props}
