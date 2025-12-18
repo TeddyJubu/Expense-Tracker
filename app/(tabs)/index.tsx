@@ -49,7 +49,7 @@ export default function HomeScreen() {
 
       <ScrollView
         className="flex-1 bg-background"
-        contentContainerStyle={{ paddingBottom: 100 }}
+        contentContainerStyle={{ paddingBottom: insets.bottom + 80 }}
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl refreshing={refreshing || loading} onRefresh={onRefresh} tintColor="#a3e635" />

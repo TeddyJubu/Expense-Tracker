@@ -1,21 +1,42 @@
 import { View, Text, StyleSheet, ScrollView, useColorScheme, TouchableOpacity } from 'react-native';
-
+import { useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { colors, spacing, borderRadius, typography, shadows } from '@/constants/theme';
 import { useAuth, useAlert } from '@/template';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { demoDataService } from '@/services/demoData';
+import { useExpense } from '@/hooks/useExpense';
 
 export default function ProfileScreen() {
   const insets = useSafeAreaInsets();
   const { user, logout } = useAuth();
   const { showAlert } = useAlert();
-
+  const { fetchExpenses } = useExpense();
+  const [seedingDemo, setSeedingDemo] = useState(false);
 
   const handleLogout = async () => {
     const { error } = await logout();
     if (error) {
       showAlert('Error', error);
+    }
+  };
+
+  const handleSeedDemoData = async () => {
+    if (!user?.id) {
+      showAlert('Error', 'User not found');
+      return;
+    }
+
+    setSeedingDemo(true);
+    const { success, error } = await demoDataService.seedDemoData(user.id);
+    setSeedingDemo(false);
+
+    if (success) {
+      showAlert('Success', 'Demo data added! Refresh to see changes.');
+      await fetchExpenses();
+    } else {
+      showAlert('Error', error || 'Failed to seed demo data');
     }
   };
 
@@ -26,6 +47,7 @@ export default function ProfileScreen() {
     { icon: 'help-circle-outline', title: 'Help & Support', onPress: () => showAlert('Info', 'Coming soon') },
     { icon: 'information-circle-outline', title: 'About', onPress: () => showAlert('Info', 'ExpenseTracker v1.0') },
     { icon: 'shield-checkmark-outline', title: 'Privacy Policy', onPress: () => router.push('/privacy-policy') },
+    { icon: 'flask-outline', title: 'Seed Demo Data', onPress: handleSeedDemoData, isDanger: false },
   ];
 
   return (
@@ -82,6 +104,7 @@ export default function ProfileScreen() {
                   { borderBottomColor: colors.border }
                 ]}
                 onPress={item.onPress}
+                disabled={seedingDemo && item.title === 'Seed Demo Data'}
                 activeOpacity={0.7}
               >
                 <Ionicons
@@ -90,7 +113,7 @@ export default function ProfileScreen() {
                   color={colors.text}
                 />
                 <Text style={[styles.menuItemText, { color: colors.text }]}>
-                  {item.title}
+                  {item.title} {seedingDemo && item.title === 'Seed Demo Data' ? '...' : ''}
                 </Text>
                 <Ionicons
                   name="chevron-forward"
