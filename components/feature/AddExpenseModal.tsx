@@ -7,6 +7,7 @@ import { aiService } from '@/services/ai';
 import { useAlert } from '@/template';
 import * as ImagePicker from 'expo-image-picker';
 import { Audio } from 'expo-av';
+import * as FileSystem from 'expo-file-system';
 
 interface AddExpenseModalProps {
   visible: boolean;
@@ -72,10 +73,31 @@ export function AddExpenseModal({ visible, onClose }: AddExpenseModalProps) {
         const uri = recording.getURI();
 
         if (uri) {
-          const { sound } = await Audio.Sound.createAsync({ uri });
-          await sound.unloadAsync();
+          // Convert audio to base64
+          const audioBase64 = await FileSystem.readAsStringAsync(uri, {
+            encoding: FileSystem.EncodingType.Base64,
+          });
 
-          showAlert('Info', 'Voice recording completed. In production, this would be transcribed and parsed.');
+          const { data, error } = await aiService.parseExpense(undefined, undefined, 'voice', audioBase64);
+
+          if (error) {
+            showAlert('Error', error);
+          } else if (data) {
+            const category = categories.find(c => c.name === data.category);
+            await addExpense({
+              amount: data.amount,
+              description: data.description,
+              category_id: category?.id || null,
+              date: data.date,
+              input_method: 'voice',
+              photo_url: null,
+            });
+
+            showAlert('Success', 'Expense added from voice');
+            setMode('select');
+            onClose();
+          }
+
           setRecording(null);
           setLoading(false);
         }
@@ -330,11 +352,11 @@ export function AddExpenseModal({ visible, onClose }: AddExpenseModalProps) {
           styles.modalContent,
           { backgroundColor: isDark ? colors.backgroundDark : colors.background }
         ]}>
-          {loading && mode === 'photo' ? (
+          {(loading && (mode === 'photo' || mode === 'voice')) ? (
             <View style={styles.loadingContainer}>
               <ActivityIndicator size="large" color={colors.primary} />
               <Text style={[styles.loadingText, { color: isDark ? colors.textDark : colors.text }]}>
-                Analyzing receipt...
+                {mode === 'photo' ? 'Analyzing receipt...' : 'Analyzing voice...'}
               </Text>
             </View>
           ) : (
