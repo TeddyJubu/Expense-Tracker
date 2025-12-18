@@ -9,8 +9,6 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { Category } from '@/services/database';
 
 export default function BudgetsScreen() {
-  const colorScheme = useColorScheme();
-  const isDark = colorScheme === 'dark';
   const insets = useSafeAreaInsets();
   const { expenses, categories, budgets, addBudget, loading } = useExpense();
   const { showAlert } = useAlert();
@@ -63,16 +61,16 @@ export default function BudgetsScreen() {
 
   if (loading) {
     return (
-      <View style={[styles.loadingContainer, { backgroundColor: isDark ? colors.backgroundDark : colors.background }]}>
+      <View style={[styles.loadingContainer, { backgroundColor: colors.background }]}>
         <ActivityIndicator size="large" color={colors.primary} />
       </View>
     );
   }
 
   return (
-    <View style={[styles.container, { backgroundColor: isDark ? colors.backgroundDark : colors.background }]}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       <View style={[styles.header, { paddingTop: Math.max(1, insets.top + spacing.md) }]}>
-        <Text style={[styles.title, { color: isDark ? colors.textDark : colors.text }]}>
+        <Text style={[styles.title, { color: colors.text }]}>
           Budgets
         </Text>
         <TouchableOpacity
@@ -104,9 +102,9 @@ export default function BudgetsScreen() {
               <Ionicons
                 name="wallet-outline"
                 size={64}
-                color={isDark ? colors.textSecondaryDark : colors.textSecondary}
+                color={colors.textSecondary}
               />
-              <Text style={[styles.emptyText, { color: isDark ? colors.textSecondaryDark : colors.textSecondary }]}>
+              <Text style={[styles.emptyText, { color: colors.textSecondary }]}>
                 No budgets set yet. Tap + to create one!
               </Text>
             </View>
@@ -123,13 +121,13 @@ export default function BudgetsScreen() {
         <View style={styles.modalOverlay}>
           <View style={[
             styles.modalContent,
-            { backgroundColor: isDark ? colors.backgroundDark : colors.background }
+            { backgroundColor: colors.background }
           ]}>
-            <Text style={[styles.modalTitle, { color: isDark ? colors.textDark : colors.text }]}>
+            <Text style={[styles.modalTitle, { color: colors.text }]}>
               Create Budget
             </Text>
 
-            <Text style={[styles.label, { color: isDark ? colors.textDark : colors.text }]}>
+            <Text style={[styles.label, { color: colors.text }]}>
               Select Category
             </Text>
             <ScrollView
@@ -143,7 +141,7 @@ export default function BudgetsScreen() {
                   style={[
                     styles.categoryChip,
                     {
-                      backgroundColor: selectedCategory?.id === cat.id ? cat.color : (isDark ? colors.surfaceDark : colors.surface),
+                      backgroundColor: selectedCategory?.id === cat.id ? cat.color : colors.surface,
                       borderColor: cat.color,
                     }
                   ]}
@@ -158,7 +156,7 @@ export default function BudgetsScreen() {
                   <Text style={[
                     styles.categoryChipText,
                     {
-                      color: selectedCategory?.id === cat.id ? colors.background : (isDark ? colors.textDark : colors.text)
+                      color: selectedCategory?.id === cat.id ? colors.background : colors.text
                     }
                   ]}>
                     {cat.name}
@@ -167,20 +165,20 @@ export default function BudgetsScreen() {
               ))}
             </ScrollView>
 
-            <Text style={[styles.label, { color: isDark ? colors.textDark : colors.text }]}>
+            <Text style={[styles.label, { color: colors.text }]}>
               Monthly Budget Amount
             </Text>
             <TextInput
               style={[
                 styles.input,
                 {
-                  backgroundColor: isDark ? colors.surfaceDark : colors.surface,
-                  color: isDark ? colors.textDark : colors.text,
-                  borderColor: isDark ? colors.borderDark : colors.border,
+                  backgroundColor: colors.surface,
+                  color: colors.text,
+                  borderColor: colors.border,
                 }
               ]}
               placeholder="0.00"
-              placeholderTextColor={isDark ? colors.textSecondaryDark : colors.textSecondary}
+              placeholderTextColor={colors.textSecondary}
               value={amount}
               onChangeText={setAmount}
               keyboardType="decimal-pad"
@@ -188,11 +186,11 @@ export default function BudgetsScreen() {
 
             <View style={styles.modalButtons}>
               <TouchableOpacity
-                style={[styles.modalButton, { backgroundColor: isDark ? colors.surfaceDark : colors.surface }]}
+                style={[styles.modalButton, { backgroundColor: colors.surface }]}
                 onPress={() => setModalVisible(false)}
                 activeOpacity={0.7}
               >
-                <Text style={[styles.modalButtonText, { color: isDark ? colors.textDark : colors.text }]}>
+                <Text style={[styles.modalButtonText, { color: colors.text }]}>
                   Cancel
                 </Text>
               </TouchableOpacity>

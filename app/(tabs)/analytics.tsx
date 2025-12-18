@@ -108,10 +108,7 @@ export default function AnalyticsScreen() {
               type: 'bar',
               data: data.map(item => item[1]),
               itemStyle: {
-                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                  { offset: 0, color: '${colors.gradientStart}' },
-                  { offset: 1, color: '${colors.gradientEnd}' }
-                ]),
+                color: '#a3e635',
                 borderRadius: [8, 8, 0, 0]
               }
             }]

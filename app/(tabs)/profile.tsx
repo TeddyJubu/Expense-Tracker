@@ -7,8 +7,6 @@ import { useAuth, useAlert } from '@/template';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function ProfileScreen() {
-  const colorScheme = useColorScheme();
-  const isDark = colorScheme === 'dark';
   const insets = useSafeAreaInsets();
   const { user, logout } = useAuth();
   const { showAlert } = useAlert();
@@ -31,9 +29,9 @@ export default function ProfileScreen() {
   ];
 
   return (
-    <View style={[styles.container, { backgroundColor: isDark ? colors.backgroundDark : colors.background }]}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       <View style={[styles.header, { paddingTop: Math.max(1, insets.top + spacing.md) }]}>
-        <Text style={[styles.title, { color: isDark ? colors.textDark : colors.text }]}>
+        <Text style={[styles.title, { color: colors.text }]}>
           Profile
         </Text>
       </View>
@@ -47,21 +45,21 @@ export default function ProfileScreen() {
           <View style={[
             styles.profileCard,
             {
-              backgroundColor: isDark ? colors.cardDark : colors.card,
-              borderColor: isDark ? colors.borderDark : colors.border,
+              backgroundColor: colors.card,
+              borderColor: colors.border,
             },
             shadows.card
           ]}>
             <View style={[styles.avatar, { backgroundColor: colors.primary }]}>
-              <Text style={styles.avatarText}>
+              <Text style={[styles.avatarText, { color: '#09090b' }]}>
                 {user?.email?.charAt(0).toUpperCase() || 'U'}
               </Text>
             </View>
-            <Text style={[styles.email, { color: isDark ? colors.textDark : colors.text }]}>
+            <Text style={[styles.email, { color: colors.text }]}>
               {user?.email || 'user@example.com'}
             </Text>
             {user?.username && (
-              <Text style={[styles.username, { color: isDark ? colors.textSecondaryDark : colors.textSecondary }]}>
+              <Text style={[styles.username, { color: colors.textSecondary }]}>
                 @{user.username}
               </Text>
             )}
@@ -70,8 +68,8 @@ export default function ProfileScreen() {
           <View style={[
             styles.menuCard,
             {
-              backgroundColor: isDark ? colors.cardDark : colors.card,
-              borderColor: isDark ? colors.borderDark : colors.border,
+              backgroundColor: colors.card,
+              borderColor: colors.border,
             },
             shadows.card
           ]}>
@@ -81,7 +79,7 @@ export default function ProfileScreen() {
                 style={[
                   styles.menuItem,
                   index < menuItems.length - 1 && styles.menuItemBorder,
-                  { borderBottomColor: isDark ? colors.borderDark : colors.border }
+                  { borderBottomColor: colors.border }
                 ]}
                 onPress={item.onPress}
                 activeOpacity={0.7}
@@ -89,15 +87,15 @@ export default function ProfileScreen() {
                 <Ionicons
                   name={item.icon as keyof typeof Ionicons.glyphMap}
                   size={24}
-                  color={isDark ? colors.textDark : colors.text}
+                  color={colors.text}
                 />
-                <Text style={[styles.menuItemText, { color: isDark ? colors.textDark : colors.text }]}>
+                <Text style={[styles.menuItemText, { color: colors.text }]}>
                   {item.title}
                 </Text>
                 <Ionicons
                   name="chevron-forward"
                   size={20}
-                  color={isDark ? colors.textSecondaryDark : colors.textSecondary}
+                  color={colors.textSecondary}
                 />
               </TouchableOpacity>
             ))}
@@ -112,7 +110,7 @@ export default function ProfileScreen() {
             <Text style={styles.logoutButtonText}>Sign Out</Text>
           </TouchableOpacity>
 
-          <Text style={[styles.version, { color: isDark ? colors.textSecondaryDark : colors.textSecondary }]}>
+          <Text style={[styles.version, { color: colors.textSecondary }]}>
             ExpenseTracker v1.0.0
           </Text>
         </View>

@@ -4,19 +4,13 @@
 
 // Powered by OnSpace.AI
 import { MaterialIcons } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function NotFoundScreen() {
   return (
-    <SafeAreaView style={styles.container}>
-      <LinearGradient
-        colors={['#0a0a0a', '#1a1a1a']}
-        style={StyleSheet.absoluteFillObject}
-      />
-
+    <SafeAreaView style={[styles.container, { backgroundColor: '#09090b' }]}>
       <View style={styles.content}>
         <MaterialIcons name="photo-camera" size={80} color="#FFD700" />
         <Text style={styles.title}>Page Not Found</Text>

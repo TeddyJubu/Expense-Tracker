@@ -105,6 +105,22 @@ export default function PrivacyPolicyScreen() {
                 >
                     {privacyPolicyContent}
                 </Markdown>
+
+                <View style={styles.dangerZone}>
+                    <Text style={[styles.dangerTitle, { color: isDark ? colors.textDark : colors.text }]}>Data Deletion</Text>
+                    <Text style={[styles.dangerText, { color: isDark ? colors.textSecondaryDark : colors.textSecondary }]}>
+                        You have the right to delete your account and all associated data. This action is irreversible.
+                    </Text>
+                    <TouchableOpacity
+                        style={styles.deleteButton}
+                        onPress={() => {
+                            // In a real app, this would show a confirmation Alert and then call the deletion API
+                            alert('This feature will permanently delete your account. Implementation required on backend.');
+                        }}
+                    >
+                        <Text style={styles.deleteButtonText}>Delete My Account</Text>
+                    </TouchableOpacity>
+                </View>
             </ScrollView>
         </View>
     );
@@ -138,5 +154,32 @@ const styles = StyleSheet.create({
     content: {
         padding: spacing.lg,
         paddingBottom: spacing.xxxl,
+    },
+    dangerZone: {
+        marginTop: spacing.xxl,
+        padding: spacing.lg,
+        borderWidth: 1,
+        borderColor: colors.error,
+        borderRadius: borderRadius.lg,
+        backgroundColor: 'rgba(255, 0, 0, 0.05)',
+    },
+    dangerTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        marginBottom: spacing.sm,
+    },
+    dangerText: {
+        fontSize: 14,
+        marginBottom: spacing.lg,
+    },
+    deleteButton: {
+        backgroundColor: colors.error,
+        padding: spacing.md,
+        borderRadius: borderRadius.md,
+        alignItems: 'center',
+    },
+    deleteButtonText: {
+        color: 'white',
+        fontWeight: 'bold',
     },
 });

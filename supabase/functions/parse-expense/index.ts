@@ -37,7 +37,7 @@ Deno.serve(async (req) => {
     const { text, imageBase64, inputMethod }: ParseExpenseRequest = await req.json();
 
     let messages = [];
-    
+
     if (inputMethod === 'photo' && imageBase64) {
       messages = [
         {
@@ -55,14 +55,15 @@ Deno.serve(async (req) => {
         }
       ];
     } else {
-      const prompt = inputMethod === 'voice' 
+      const prompt = inputMethod === 'voice'
         ? `Parse this voice transcription into an expense: "${text}". Return JSON with: amount (number), description (string), category (one of: Food, Transport, Shopping, Entertainment, Bills, Health, Other), date (ISO string, default to today).`
         : `Parse this expense entry: "${text}". Return JSON with: amount (number), description (string), category (one of: Food, Transport, Shopping, Entertainment, Bills, Health, Other), date (ISO string, default to today).`;
-      
+
       messages = [{ role: 'user', content: prompt }];
     }
 
-    console.log('Calling OnSpace AI with model: google/gemini-3-flash-preview');
+    const modelName = Deno.env.get('GEMINI_MODEL') ?? 'google/gemini-3-flash-preview';
+    console.log(`Calling OnSpace AI with model: ${modelName}`);
 
     const response = await fetch(`${ONSPACE_AI_BASE_URL}/chat/completions`, {
       method: 'POST',
@@ -71,7 +72,7 @@ Deno.serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'google/gemini-3-flash-preview',
+        model: modelName,
         messages,
         response_format: { type: 'json_object' }
       }),

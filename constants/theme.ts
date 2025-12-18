@@ -1,51 +1,52 @@
 export const colors = {
-  // Primary palette - Green for highlights
-  primary: '#00A699',
-  primaryLight: '#1FBFB3',
-  primaryDark: '#008A7D',
-  
-  // Background
-  background: '#FFFFFF',
-  backgroundDark: '#222222',
-  surface: '#F7F7F7',
-  surfaceDark: '#2B2B2B',
-  card: '#FFFFFF',
-  cardDark: '#2B2B2B',
-  
-  // Text
-  text: '#222222',
-  textDark: '#FFFFFF',
-  textSecondary: '#717171',
-  textSecondaryDark: '#B0B0B0',
-  
-  // Category colors (Airbnb-inspired palette)
-  categoryFood: '#FC642D',
-  categoryTransport: '#008489',
-  categoryShopping: '#BD1E59',
-  categoryEntertainment: '#9065B0',
-  categoryBills: '#E0B423',
-  categoryHealth: '#00A699',
-  categoryOther: '#767676',
-  
+  // Shadcn-inspired dark mode with lime accents
+  // Primary palette - Lime for highlights
+  primary: '#a3e635',
+  primaryLight: '#bef264',
+  primaryDark: '#84cc16',
+
+  // Background - Dark neutral
+  background: '#09090b',
+  backgroundDark: '#09090b',
+  surface: '#18181b',
+  surfaceDark: '#18181b',
+  card: '#18181b',
+  cardDark: '#18181b',
+
+  // Text - Light on dark
+  text: '#fafafa',
+  textDark: '#fafafa',
+  textSecondary: '#a1a1aa',
+  textSecondaryDark: '#a1a1aa',
+
+  // Category colors (vibrant on dark)
+  categoryFood: '#f97316',
+  categoryTransport: '#06b6d4',
+  categoryShopping: '#ec4899',
+  categoryEntertainment: '#a855f7',
+  categoryBills: '#eab308',
+  categoryHealth: '#10b981',
+  categoryOther: '#71717a',
+
   // Status
-  success: '#00A699',
-  warning: '#FF5A5F',
-  error: '#E0424B',
-  info: '#008489',
-  
-  // UI Elements
-  border: '#EBEBEB',
-  borderDark: '#3D3D3D',
-  divider: '#DDDDDD',
-  dividerDark: '#3D3D3D',
-  
+  success: '#84cc16',
+  warning: '#eab308',
+  error: '#dc2626',
+  info: '#06b6d4',
+
+  // UI Elements - Subtle borders on dark
+  border: '#27272a',
+  borderDark: '#27272a',
+  divider: '#27272a',
+  dividerDark: '#27272a',
+
   // Overlays
-  overlay: 'rgba(34, 34, 34, 0.6)',
-  overlayLight: 'rgba(34, 34, 34, 0.3)',
-  
-  // Gradients
-  gradientStart: '#00A699',
-  gradientEnd: '#008489',
+  overlay: 'rgba(0, 0, 0, 0.8)',
+  overlayLight: 'rgba(0, 0, 0, 0.5)',
+
+  // Gradients - Lime gradient
+  gradientStart: '#a3e635',
+  gradientEnd: '#84cc16',
 };
 
 export const spacing = {

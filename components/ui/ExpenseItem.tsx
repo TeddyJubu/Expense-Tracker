@@ -10,9 +10,6 @@ interface ExpenseItemProps {
 }
 
 export function ExpenseItem({ expense, category, onPress }: ExpenseItemProps) {
-  const colorScheme = useColorScheme();
-  const isDark = colorScheme === 'dark';
-
   const formattedDate = new Date(expense.date).toLocaleDateString('en-US', {
     month: 'short',
     day: 'numeric',
@@ -25,7 +22,9 @@ export function ExpenseItem({ expense, category, onPress }: ExpenseItemProps) {
       style={[
         styles.container,
         {
-          backgroundColor: isDark ? colors.cardDark : colors.card,
+          backgroundColor: colors.card,
+          borderColor: colors.border,
+          borderWidth: 1,
         },
         shadows.card
       ]}
@@ -33,45 +32,45 @@ export function ExpenseItem({ expense, category, onPress }: ExpenseItemProps) {
       activeOpacity={0.8}
     >
       <View style={[styles.iconContainer, { backgroundColor: categoryColor }]}>
-        <Ionicons 
-          name={(category?.icon as keyof typeof Ionicons.glyphMap) || 'ellipsis-horizontal'} 
-          size={20} 
-          color={colors.background} 
+        <Ionicons
+          name={(category?.icon as keyof typeof Ionicons.glyphMap) || 'ellipsis-horizontal'}
+          size={20}
+          color="#09090b"
         />
       </View>
-      
+
       <View style={styles.content}>
-        <Text style={[styles.description, { color: isDark ? colors.textDark : colors.text }]} numberOfLines={1}>
+        <Text style={[styles.description, { color: colors.text }]} numberOfLines={1}>
           {expense.description || 'No description'}
         </Text>
         <View style={styles.metadata}>
-          <Text style={[styles.category, { color: isDark ? colors.textSecondaryDark : colors.textSecondary }]}>
+          <Text style={[styles.category, { color: colors.textSecondary }]}>
             {category?.name || 'Other'}
           </Text>
-          <Text style={[styles.dot, { color: isDark ? colors.textSecondaryDark : colors.textSecondary }]}>
+          <Text style={[styles.dot, { color: colors.textSecondary }]}>
             ·
           </Text>
-          <Text style={[styles.date, { color: isDark ? colors.textSecondaryDark : colors.textSecondary }]}>
+          <Text style={[styles.date, { color: colors.textSecondary }]}>
             {formattedDate}
           </Text>
           {expense.input_method !== 'manual' && (
             <View style={styles.badgeContainer}>
               <View style={[styles.badge, { backgroundColor: `${colors.primary}20` }]}>
-                <Ionicons 
+                <Ionicons
                   name={
                     expense.input_method === 'chat' ? 'chatbubble' :
                     expense.input_method === 'voice' ? 'mic' : 'camera'
-                  } 
-                  size={10} 
-                  color={colors.primary} 
+                  }
+                  size={10}
+                  color={colors.primary}
                 />
               </View>
             </View>
           )}
         </View>
       </View>
-      
-      <Text style={[styles.amount, { color: isDark ? colors.textDark : colors.text }]}>
+
+      <Text style={[styles.amount, { color: colors.text }]}>
         ${expense.amount.toFixed(2)}
       </Text>
     </TouchableOpacity>

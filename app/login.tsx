@@ -6,8 +6,6 @@ import { colors, spacing, borderRadius, typography, shadows } from '@/constants/
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function LoginScreen() {
-  const colorScheme = useColorScheme();
-  const isDark = colorScheme === 'dark';
   const insets = useSafeAreaInsets();
   const { signInWithPassword, signUpWithPassword, operationLoading } = useAuth();
   const { showAlert } = useAlert();
@@ -44,28 +42,28 @@ export default function LoginScreen() {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={[styles.container, { backgroundColor: isDark ? colors.backgroundDark : colors.background, paddingTop: insets.top }]}
+      style={[styles.container, { backgroundColor: colors.background, paddingTop: insets.top }]}
     >
       <View style={styles.content}>
         <View style={styles.header}>
           <Text style={styles.logo}>💰</Text>
-          <Text style={[styles.title, { color: isDark ? colors.textDark : colors.text }]}>ExpenseTracker</Text>
-          <Text style={[styles.subtitle, { color: isDark ? colors.textSecondaryDark : colors.textSecondary }]}>AI-Powered Expense Management</Text>
+          <Text style={[styles.title, { color: colors.text }]}>ExpenseTracker</Text>
+          <Text style={[styles.subtitle, { color: colors.textSecondary }]}>AI-Powered Expense Management</Text>
         </View>
 
         <View style={styles.formSection}>
-          <View style={[styles.formContainer, { backgroundColor: isDark ? colors.cardDark : colors.card }, shadows.card]}>
+          <View style={[styles.formContainer, { backgroundColor: colors.card, borderColor: colors.border, borderWidth: 1 }, shadows.card]}>
             <TextInput
               style={[
                 styles.input,
                 {
-                  backgroundColor: isDark ? colors.cardDark : colors.card,
-                  color: isDark ? colors.textDark : colors.text,
-                  borderColor: isDark ? colors.borderDark : colors.border,
+                  backgroundColor: colors.card,
+                  color: colors.text,
+                  borderColor: colors.border,
                 }
               ]}
               placeholder="Email"
-              placeholderTextColor={isDark ? colors.textSecondaryDark : colors.textSecondary}
+              placeholderTextColor={colors.textSecondary}
               value={email}
               onChangeText={setEmail}
               keyboardType="email-address"
@@ -77,13 +75,13 @@ export default function LoginScreen() {
               style={[
                 styles.input,
                 {
-                  backgroundColor: isDark ? colors.cardDark : colors.card,
-                  color: isDark ? colors.textDark : colors.text,
-                  borderColor: isDark ? colors.borderDark : colors.border,
+                  backgroundColor: colors.card,
+                  color: colors.text,
+                  borderColor: colors.border,
                 }
               ]}
               placeholder="Password"
-              placeholderTextColor={isDark ? colors.textSecondaryDark : colors.textSecondary}
+              placeholderTextColor={colors.textSecondary}
               value={password}
               onChangeText={setPassword}
               secureTextEntry
@@ -95,13 +93,13 @@ export default function LoginScreen() {
                 style={[
                   styles.input,
                   {
-                    backgroundColor: isDark ? colors.cardDark : colors.card,
-                    color: isDark ? colors.textDark : colors.text,
-                    borderColor: isDark ? colors.borderDark : colors.border,
+                    backgroundColor: colors.card,
+                    color: colors.text,
+                    borderColor: colors.border,
                   }
                 ]}
                 placeholder="Confirm Password"
-                placeholderTextColor={isDark ? colors.textSecondaryDark : colors.textSecondary}
+                placeholderTextColor={colors.textSecondary}
                 value={confirmPassword}
                 onChangeText={setConfirmPassword}
                 secureTextEntry
@@ -120,9 +118,9 @@ export default function LoginScreen() {
               activeOpacity={0.8}
             >
               {operationLoading ? (
-                <ActivityIndicator color={colors.background} />
+                <ActivityIndicator color="#09090b" />
               ) : (
-                <Text style={styles.buttonText}>
+                <Text style={[styles.buttonText, { color: '#09090b' }]}>
                   {isSignUp ? 'Sign Up' : 'Sign In'}
                 </Text>
               )}
@@ -134,7 +132,7 @@ export default function LoginScreen() {
             onPress={() => setIsSignUp(!isSignUp)}
             disabled={operationLoading}
           >
-            <Text style={[styles.switchText, { color: isDark ? colors.textSecondaryDark : colors.textSecondary }]}>
+            <Text style={[styles.switchText, { color: colors.textSecondary }]}>
               {isSignUp ? 'Already have an account? ' : "Do not have an account? "}
               <Text style={{ color: colors.primary, fontWeight: '600' }}>
                 {isSignUp ? 'Sign In' : 'Sign Up'}

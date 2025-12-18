@@ -2,7 +2,8 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 
 const apiKey = process.env.EXPO_PUBLIC_GEMINI_API_KEY || '';
 const genAI = new GoogleGenerativeAI(apiKey);
-const model = genAI.getGenerativeModel({ model: 'gemini-3-flash-preview' });
+const modelName = process.env.EXPO_PUBLIC_GEMINI_MODEL || 'gemini-2.0-flash-exp';
+const model = genAI.getGenerativeModel({ model: modelName });
 
 export interface ParsedExpense {
   amount: number;
