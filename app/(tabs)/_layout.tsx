@@ -102,20 +102,6 @@ export default function TabLayout() {
         }}
       />
 
-      {/* Smart FAB in the middle */}
-      <Tabs.Screen
-        name="add-expense"
-        options={{
-          title: '',
-          tabBarButton: (props) => (
-            <CustomFAB
-              {...props}
-              onPress={() => router.push('/add-expense')}
-            />
-          ),
-        }}
-      />
-
       <Tabs.Screen
         name="budgets"
         options={{

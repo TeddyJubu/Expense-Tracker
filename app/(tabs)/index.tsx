@@ -127,7 +127,10 @@ export default function HomeScreen() {
 
       {/* Floating Action Button */}
       <TouchableOpacity
-        onPress={() => router.push('/add-expense')}
+        onPress={() => {
+          // TODO: Navigate to add-expense modal
+          console.log('Add expense button pressed');
+        }}
         className="absolute bottom-24 right-6 bg-primary rounded-full p-4 shadow-lg active:opacity-80"
         style={{
           shadowColor: '#a3e635',
