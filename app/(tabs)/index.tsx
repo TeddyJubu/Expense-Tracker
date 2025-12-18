@@ -1,6 +1,7 @@
-import { View, ScrollView, RefreshControl } from 'react-native';
+import { View, ScrollView, RefreshControl, TouchableOpacity } from 'react-native';
 import { useState, useMemo, useCallback } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 
 import { useExpense } from '@/hooks/useExpense';
@@ -10,6 +11,7 @@ import { ExpenseItem } from '@/components/ui/ExpenseItem';
 import { SimpleLineChart } from '@/components/ui/Chart';
 
 export default function HomeScreen() {
+  const router = useRouter();
   const insets = useSafeAreaInsets();
   const { expenses, categories, loading, fetchExpenses } = useExpense();
   const [refreshing, setRefreshing] = useState(false);
@@ -122,6 +124,21 @@ export default function HomeScreen() {
           </View>
         </View>
       </ScrollView>
+
+      {/* Floating Action Button */}
+      <TouchableOpacity
+        onPress={() => router.push('/add-expense')}
+        className="absolute bottom-24 right-6 bg-primary rounded-full p-4 shadow-lg active:opacity-80"
+        style={{
+          shadowColor: '#a3e635',
+          shadowOffset: { width: 0, height: 4 },
+          shadowOpacity: 0.3,
+          shadowRadius: 8,
+          elevation: 8,
+        }}
+      >
+        <Ionicons name="add" size={28} color="#09090b" />
+      </TouchableOpacity>
     </View>
   );
 }
