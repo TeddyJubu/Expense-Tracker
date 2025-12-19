@@ -1,9 +1,6 @@
 import { Tabs } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { View, TouchableOpacity, StyleSheet, Platform } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useRouter } from 'expo-router';
-import * as Haptics from 'expo-haptics';
+import { Platform } from 'react-native';
 
 // Shadcn-inspired Dark Theme with Lime Accents
 const THEME = {
@@ -15,47 +12,7 @@ const THEME = {
   inactive: '#71717a',
 };
 
-const CustomFAB = ({ children, onPress }: any) => (
-  <TouchableOpacity
-    style={{
-      top: -20,
-      justifyContent: 'center',
-      alignItems: 'center',
-      ...Platform.select({
-        ios: {
-          shadowColor: '#000',
-          shadowOffset: { width: 0, height: 4 },
-          shadowOpacity: 0.3,
-          shadowRadius: 4,
-        },
-        android: { elevation: 5 },
-      }),
-    }}
-    onPress={() => {
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-      onPress();
-    }}
-    activeOpacity={0.8}
-  >
-    <View
-      style={{
-        width: 60,
-        height: 60,
-        borderRadius: 30,
-        backgroundColor: THEME.accent,
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}
-    >
-      <Ionicons name="add" size={32} color="#09090b" />
-    </View>
-  </TouchableOpacity>
-);
-
 export default function TabLayout() {
-  const insets = useSafeAreaInsets();
-  const router = useRouter();
-
   return (
     <Tabs
       screenOptions={{
@@ -111,17 +68,6 @@ export default function TabLayout() {
           ),
         }}
       />
-
-      <Tabs.Screen
-        name="profile"
-        options={{
-          title: 'Profile',
-          tabBarIcon: ({ color, focused }) => (
-            <Ionicons name={focused ? "person" : "person-outline"} size={24} color={color} />
-          ),
-        }}
-      />
     </Tabs>
   );
 }
-

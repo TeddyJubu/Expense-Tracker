@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, ScrollView, useColorScheme, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
@@ -14,6 +14,15 @@ export default function ProfileScreen() {
   const { showAlert } = useAlert();
   const { fetchExpenses } = useExpense();
   const [seedingDemo, setSeedingDemo] = useState(false);
+
+  const handleBack = () => {
+    if (router.canGoBack?.()) {
+      router.back();
+      return;
+    }
+
+    router.replace('/(tabs)');
+  };
 
   const handleLogout = async () => {
     const { error } = await logout();
@@ -47,20 +56,32 @@ export default function ProfileScreen() {
     { icon: 'help-circle-outline', title: 'Help & Support', onPress: () => showAlert('Info', 'Coming soon') },
     { icon: 'information-circle-outline', title: 'About', onPress: () => showAlert('Info', 'ExpenseTracker v1.0') },
     { icon: 'shield-checkmark-outline', title: 'Privacy Policy', onPress: () => router.push('/privacy-policy') },
-    { icon: 'flask-outline', title: 'Seed Demo Data', onPress: handleSeedDemoData, isDanger: false },
+    { icon: 'flask-outline', title: 'Seed Demo Data', onPress: handleSeedDemoData },
   ];
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       <View style={[styles.header, { paddingTop: Math.max(1, insets.top + spacing.md) }]}>
-        <Text style={[styles.title, { color: colors.text }]}>
-          Profile
-        </Text>
+        <View style={styles.headerRow}>
+          <TouchableOpacity
+            onPress={handleBack}
+            accessibilityRole="button"
+            accessibilityLabel="Go back"
+            activeOpacity={0.7}
+            style={styles.backButton}
+          >
+            <Ionicons name="chevron-back" size={26} color={colors.text} />
+          </TouchableOpacity>
+          <Text style={[styles.title, { color: colors.text }]}>
+            Profile
+          </Text>
+          <View style={styles.headerSpacer} />
+        </View>
       </View>
 
       <ScrollView
         style={styles.scrollView}
-        contentContainerStyle={{ paddingBottom: Math.max(1, insets.bottom + 80) }}
+        contentContainerStyle={{ paddingBottom: Math.max(1, insets.bottom + spacing.xl) }}
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.content}>
@@ -97,7 +118,7 @@ export default function ProfileScreen() {
           ]}>
             {menuItems.map((item, index) => (
               <TouchableOpacity
-                key={index}
+                key={item.title}
                 style={[
                   styles.menuItem,
                   index < menuItems.length - 1 && styles.menuItemBorder,
@@ -149,6 +170,18 @@ const styles = StyleSheet.create({
   header: {
     padding: spacing.lg,
     paddingBottom: spacing.md,
+  },
+  headerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  backButton: {
+    paddingVertical: spacing.xs,
+    paddingRight: spacing.sm,
+  },
+  headerSpacer: {
+    width: 26 + spacing.sm,
   },
   title: {
     ...typography.h1,

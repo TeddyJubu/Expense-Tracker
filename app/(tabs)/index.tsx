@@ -10,6 +10,7 @@ import { Card } from '@/components/ui/Card';
 import { ExpenseItem } from '@/components/ui/ExpenseItem';
 import { SimpleLineChart } from '@/components/ui/Chart';
 import { AddExpenseModal } from '@/components/feature/AddExpenseModal';
+import { OverflowMenu } from '@/components/ui/OverflowMenu';
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -47,8 +48,21 @@ export default function HomeScreen() {
         style={{ paddingTop: insets.top + 20, paddingBottom: 20 }}
         className="px-6 bg-card z-10 border-b border-border"
       >
-        <Typography variant="body" className="text-muted-foreground mb-1">Good Morning 👋</Typography>
-        <H1 className="text-foreground">Overview</H1>
+        <View className="flex-row items-start justify-between">
+          <View>
+            <Typography variant="body" className="text-muted-foreground mb-1">Good Morning 👋</Typography>
+            <H1 className="text-foreground">Overview</H1>
+          </View>
+          <OverflowMenu
+            items={[
+              {
+                label: 'Profile',
+                icon: 'person-outline',
+                onPress: () => router.push('/profile'),
+              },
+            ]}
+          />
+        </View>
       </View>
 
       <ScrollView
