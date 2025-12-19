@@ -1,4 +1,4 @@
-import { View, ScrollView, RefreshControl, TouchableOpacity, Alert } from 'react-native';
+import { View, ScrollView, RefreshControl, TouchableOpacity } from 'react-native';
 import { useState, useMemo, useCallback } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
@@ -9,12 +9,15 @@ import { Typography, H1, H2, Caption } from '@/components/ui/Typography';
 import { Card } from '@/components/ui/Card';
 import { ExpenseItem } from '@/components/ui/ExpenseItem';
 import { SimpleLineChart } from '@/components/ui/Chart';
+import { AddExpenseModal } from '@/components/feature/AddExpenseModal';
+import { OverflowMenu } from '@/components/ui/OverflowMenu';
 
 export default function HomeScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const { expenses, categories, loading, fetchExpenses } = useExpense();
   const [refreshing, setRefreshing] = useState(false);
+  const [showAddExpense, setShowAddExpense] = useState(false);
 
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
@@ -45,8 +48,21 @@ export default function HomeScreen() {
         style={{ paddingTop: insets.top + 20, paddingBottom: 20 }}
         className="px-6 bg-card z-10 border-b border-border"
       >
-        <Typography variant="body" className="text-muted-foreground mb-1">Good Morning 👋</Typography>
-        <H1 className="text-foreground">Overview</H1>
+        <View className="flex-row items-start justify-between">
+          <View>
+            <Typography variant="body" className="text-muted-foreground mb-1">Good Morning 👋</Typography>
+            <H1 className="text-foreground">Overview</H1>
+          </View>
+          <OverflowMenu
+            items={[
+              {
+                label: 'Profile',
+                icon: 'person-outline',
+                onPress: () => router.push('/profile'),
+              },
+            ]}
+          />
+        </View>
       </View>
 
       <ScrollView
@@ -127,7 +143,7 @@ export default function HomeScreen() {
 
       {/* Floating Action Button */}
       <TouchableOpacity
-        onPress={() => Alert.alert('Add Expense', 'Feature coming soon!')}
+        onPress={() => setShowAddExpense(true)}
         className="absolute bottom-24 right-6 bg-primary rounded-full p-4 shadow-lg active:opacity-80"
         style={{
           shadowColor: '#a3e635',
@@ -139,7 +155,12 @@ export default function HomeScreen() {
       >
         <Ionicons name="add" size={28} color="#09090b" />
       </TouchableOpacity>
+
+      <AddExpenseModal
+        visible={showAddExpense}
+        onClose={() => setShowAddExpense(false)}
+        initialMode="chat"
+      />
     </View>
   );
 }
-

@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, TouchableOpacity, useColorScheme, Modal, TextInput, ActivityIndicator } from 'react-native';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { colors, spacing, borderRadius, typography } from '@/constants/theme';
 import { useExpense } from '@/hooks/useExpense';
@@ -12,20 +12,30 @@ import * as FileSystem from 'expo-file-system';
 interface AddExpenseModalProps {
   visible: boolean;
   onClose: () => void;
+  initialMode?: 'select' | 'chat' | 'voice' | 'photo';
 }
 
-export function AddExpenseModal({ visible, onClose }: AddExpenseModalProps) {
+export function AddExpenseModal({ visible, onClose, initialMode = 'select' }: AddExpenseModalProps) {
   const colorScheme = useColorScheme();
   const isDark = colorScheme === 'dark';
   const { categories, addExpense } = useExpense();
   const { showAlert } = useAlert();
 
-  const [mode, setMode] = useState<'select' | 'chat' | 'voice' | 'photo'>('select');
+  const [mode, setMode] = useState<'select' | 'chat' | 'voice' | 'photo'>(initialMode);
   const [chatInput, setChatInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [recording, setRecording] = useState<Audio.Recording | null>(null);
   const [isRecording, setIsRecording] = useState(false);
 
+  useEffect(() => {
+    if (visible) {
+      setMode(initialMode);
+      setChatInput('');
+      setLoading(false);
+      setRecording(null);
+      setIsRecording(false);
+    }
+  }, [visible, initialMode]);
 
 
   const handleChatSubmit = async () => {
