@@ -30,6 +30,10 @@ export function AddExpenseModal({ visible, onClose, initialMode = 'select' }: Ad
   useEffect(() => {
     if (visible) {
       setMode(initialMode);
+      setChatInput('');
+      setLoading(false);
+      setRecording(null);
+      setIsRecording(false);
     }
   }, [visible, initialMode]);
 
