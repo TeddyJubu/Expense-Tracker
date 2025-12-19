@@ -2,14 +2,14 @@ import { Tabs } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { Platform } from 'react-native';
 
-// Shadcn-inspired Dark Theme with Lime Accents
+// Professional Overview Dashboard Theme
 const THEME = {
   primary: '#a3e635',
   accent: '#a3e635', // Lime
-  surface: '#18181b',
-  surfaceDark: '#09090b',
-  border: '#27272a',
-  inactive: '#71717a',
+  surface: '#1a1a3a',
+  surfaceDark: '#0a0a2a',
+  border: '#3a3a4a',
+  inactive: '#b0b0bb',
 };
 
 export default function TabLayout() {
@@ -26,10 +26,10 @@ export default function TabLayout() {
           left: 0,
           right: 0,
           elevation: 0,
-          backgroundColor: Platform.select({ ios: 'rgba(24, 24, 27, 0.95)', default: '#18181b' }),
+          backgroundColor: Platform.select({ ios: 'rgba(26, 26, 58, 0.95)', default: '#1a1a3a' }),
           borderTopWidth: 1,
-          borderTopColor: '#27272a',
-          height: Platform.select({ ios: 85, default: 65 }), // Taller for premium feel
+          borderTopColor: '#3a3a4a',
+          height: Platform.select({ ios: 85, default: 65 }),
           paddingTop: 10,
           paddingBottom: Platform.select({ ios: 25, default: 10 }),
         },
@@ -65,6 +65,15 @@ export default function TabLayout() {
           title: 'Budgets',
           tabBarIcon: ({ color, focused }) => (
             <Ionicons name={focused ? "wallet" : "wallet-outline"} size={24} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="profile"
+        options={{
+          title: 'Profile',
+          tabBarIcon: ({ color, focused }) => (
+            <Ionicons name={focused ? "person" : "person-outline"} size={24} color={color} />
           ),
         }}
       />

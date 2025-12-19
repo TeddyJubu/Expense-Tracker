@@ -20,7 +20,7 @@ export const SimpleLineChart: React.FC<SimpleLineChartProps> = ({
     if (data.length === 0) return null;
 
     return (
-        <Card className="p-0 overflow-hidden bg-card border border-border shadow-sm rounded-3xl">
+        <Card className="p-0 overflow-hidden bg-navy-surface border border-navy-border shadow-card rounded-3xl">
             <View className="px-4 pt-4">
                 <Typography variant="h3" className="mb-1 text-foreground">Spending Trend</Typography>
                 <Typography variant="caption" className="text-muted-foreground">Last 7 Days</Typography>
@@ -39,23 +39,25 @@ export const SimpleLineChart: React.FC<SimpleLineChartProps> = ({
                 withVerticalLines={false}
                 withHorizontalLines={false}
                 withHorizontalLabels={false}
-                withVerticalLabels={true}
+                withVerticalLabels={false}
                 yAxisInterval={1}
                 chartConfig={{
-                    backgroundColor: '#18181b',
+                    backgroundColor: '#1a1a3a',
                     decimalPlaces: 0,
-                    color: (opacity = 1) => `rgba(163, 230, 53, ${opacity})`, // Lime accent
-                    labelColor: (opacity = 1) => `rgba(161, 161, 170, ${opacity})`,
+                    color: (opacity = 1) => `rgba(163, 230, 53, ${opacity})`, // Lime green stroke
+                    labelColor: (opacity = 1) => `rgba(176, 176, 187, ${opacity})`,
                     style: {
                         borderRadius: 16,
                         paddingRight: 0,
                         paddingLeft: 0,
                     },
                     propsForDots: {
-                        r: "4",
-                        strokeWidth: "2",
+                        r: "0", // No dots
+                        strokeWidth: "0",
                         stroke: "#a3e635"
-                    }
+                    },
+                    fillShadowGradient: "#a3e635", // Lime green gradient fill
+                    fillShadowGradientOpacity: 0.2,
                 }}
                 bezier
                 style={{
