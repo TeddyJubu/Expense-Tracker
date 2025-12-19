@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, ScrollView, useColorScheme, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
@@ -53,14 +53,26 @@ export default function ProfileScreen() {
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       <View style={[styles.header, { paddingTop: Math.max(1, insets.top + spacing.md) }]}>
-        <Text style={[styles.title, { color: colors.text }]}>
-          Profile
-        </Text>
+        <View style={styles.headerRow}>
+          <TouchableOpacity
+            onPress={() => router.back()}
+            accessibilityRole="button"
+            accessibilityLabel="Go back"
+            activeOpacity={0.7}
+            style={styles.backButton}
+          >
+            <Ionicons name="chevron-back" size={26} color={colors.text} />
+          </TouchableOpacity>
+          <Text style={[styles.title, { color: colors.text }]}>
+            Profile
+          </Text>
+          <View style={styles.headerSpacer} />
+        </View>
       </View>
 
       <ScrollView
         style={styles.scrollView}
-        contentContainerStyle={{ paddingBottom: Math.max(1, insets.bottom + 80) }}
+        contentContainerStyle={{ paddingBottom: Math.max(1, insets.bottom + spacing.xl) }}
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.content}>
@@ -149,6 +161,18 @@ const styles = StyleSheet.create({
   header: {
     padding: spacing.lg,
     paddingBottom: spacing.md,
+  },
+  headerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  backButton: {
+    paddingVertical: spacing.xs,
+    paddingRight: spacing.sm,
+  },
+  headerSpacer: {
+    width: 26 + spacing.sm,
   },
   title: {
     ...typography.h1,
