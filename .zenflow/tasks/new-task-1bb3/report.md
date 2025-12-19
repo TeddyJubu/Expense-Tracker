@@ -2,6 +2,7 @@
 
 - Added a top-right overflow menu to the Overview (Home) header.
 - Moved Profile out of the bottom tab bar and into a standalone `/profile` screen opened from the new menu.
+- Hardened menu positioning/touch handling and improved Profile back navigation for deep-link cases.
 
 ## Files changed
 
@@ -14,4 +15,3 @@
 ## Verification
 
 - `npm run lint` (passes; existing warnings remain in unrelated files).
-

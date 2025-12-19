@@ -15,6 +15,15 @@ export default function ProfileScreen() {
   const { fetchExpenses } = useExpense();
   const [seedingDemo, setSeedingDemo] = useState(false);
 
+  const handleBack = () => {
+    if (router.canGoBack?.()) {
+      router.back();
+      return;
+    }
+
+    router.replace('/(tabs)');
+  };
+
   const handleLogout = async () => {
     const { error } = await logout();
     if (error) {
@@ -47,7 +56,7 @@ export default function ProfileScreen() {
     { icon: 'help-circle-outline', title: 'Help & Support', onPress: () => showAlert('Info', 'Coming soon') },
     { icon: 'information-circle-outline', title: 'About', onPress: () => showAlert('Info', 'ExpenseTracker v1.0') },
     { icon: 'shield-checkmark-outline', title: 'Privacy Policy', onPress: () => router.push('/privacy-policy') },
-    { icon: 'flask-outline', title: 'Seed Demo Data', onPress: handleSeedDemoData, isDanger: false },
+    { icon: 'flask-outline', title: 'Seed Demo Data', onPress: handleSeedDemoData },
   ];
 
   return (
@@ -55,7 +64,7 @@ export default function ProfileScreen() {
       <View style={[styles.header, { paddingTop: Math.max(1, insets.top + spacing.md) }]}>
         <View style={styles.headerRow}>
           <TouchableOpacity
-            onPress={() => router.back()}
+            onPress={handleBack}
             accessibilityRole="button"
             accessibilityLabel="Go back"
             activeOpacity={0.7}
@@ -109,7 +118,7 @@ export default function ProfileScreen() {
           ]}>
             {menuItems.map((item, index) => (
               <TouchableOpacity
-                key={index}
+                key={item.title}
                 style={[
                   styles.menuItem,
                   index < menuItems.length - 1 && styles.menuItemBorder,
