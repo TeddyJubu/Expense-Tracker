@@ -109,18 +109,10 @@ export default function HomeScreen() {
           </View>
 
           {/* Activity Chart */}
-          <Card className="bg-navy-surface rounded-3xl p-5 border border-navy-border shadow-sm">
-            <View className="mb-4">
-              <Typography variant="h3" className="font-semibold text-lg text-text-offwhite">Spending Trend</Typography>
-              <Typography className="text-xs text-text-secondary">Last 7 Days</Typography>
-            </View>
-            <View className="h-40 w-full relative">
-              <SimpleLineChart
-                data={[450, 230, 180, 600, 320, 410, 50]}
-                labels={['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN']}
-              />
-            </View>
-          </Card>
+          <SimpleLineChart
+            data={[450, 230, 180, 600, 320, 410, 50]}
+            labels={['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN']}
+          />
 
           {/* Recent Transactions */}
           <View>
