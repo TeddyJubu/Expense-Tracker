@@ -3,7 +3,8 @@ import { useMemo } from 'react';
 import { colors, spacing, borderRadius, typography, shadows } from '@/constants/theme';
 import { useExpense } from '@/hooks/useExpense';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { WebView } from 'react-native-webview';
+
+import { CategoryChart, DailyChart } from '../../components/analytics/AnalyticsCharts';
 
 export default function AnalyticsScreen() {
   const colorScheme = useColorScheme();
@@ -30,185 +31,13 @@ export default function AnalyticsScreen() {
       return { name, value, color: category?.color || colors.categoryOther };
     });
 
-    const dailyData = Object.entries(dailyTotals)
+    const dailyData = (Object.entries(dailyTotals) as [string, number][])
       .sort((a, b) => new Date(a[0]).getTime() - new Date(b[0]).getTime())
       .slice(-7);
 
     return { categoryData, dailyData };
   }, [expenses, categories]);
 
-  const pieChartHtml = `
-    <!DOCTYPE html>
-    <html>
-      <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
-        <style>
-          body { margin: 0; padding: 0; background: transparent; }
-          #chart { width: 100%; height: 300px; }
-        </style>
-      </head>
-      <body>
-        <div id="chart"></div>
-        <script>
-          const chart = echarts.init(document.getElementById('chart'));
-          const data = ${JSON.stringify(chartData.categoryData)};
-          
-          chart.setOption({
-            tooltip: { trigger: 'item', formatter: '{b}: {c} ({d}%)' },
-            series: [{
-              type: 'pie',
-              radius: ['40%', '70%'],
-              avoidLabelOverlap: true,
-              itemStyle: { borderRadius: 10, borderColor: '#fff', borderWidth: 2 },
-              label: { show: true, formatter: '{b}\\n{c}' },
-              data: data.map(item => ({
-                name: item.name,
-                value: item.value,
-                itemStyle: { color: item.color }
-              }))
-            }]
-          });
-
-          window.addEventListener('resize', () => chart.resize());
-        </script>
-      </body>
-    </html>
-  `;
-
-  const barChartHtml = `
-    <!DOCTYPE html>
-    <html>
-      <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
-        <style>
-          body { margin: 0; padding: 0; background: transparent; }
-          #chart { width: 100%; height: 300px; }
-        </style>
-      </head>
-      <body>
-        <div id="chart"></div>
-        <script>
-          const chart = echarts.init(document.getElementById('chart'));
-          const data = ${JSON.stringify(chartData.dailyData)};
-          
-          chart.setOption({
-            tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
-            xAxis: {
-              type: 'category',
-              data: data.map(item => item[0]),
-              axisLabel: { color: '${isDark ? colors.textSecondaryDark : colors.textSecondary}' }
-            },
-            yAxis: {
-              type: 'value',
-              axisLabel: { color: '${isDark ? colors.textSecondaryDark : colors.textSecondary}' }
-            },
-            series: [{
-              type: 'bar',
-              data: data.map(item => item[1]),
-              itemStyle: {
-                color: '#a3e635',
-                borderRadius: [8, 8, 0, 0]
-              }
-            }]
-          });
-
-          window.addEventListener('resize', () => chart.resize());
-        </script>
-      </body>
-    </html>
-  `;
-
-  const renderCategoryChart = () => {
-    if (Platform.OS === 'web') {
-      const sorted = chartData.categoryData.slice().sort((a, b) => b.value - a.value);
-      const total = sorted.reduce((sum, item) => sum + item.value, 0);
-
-      return (
-        <View style={styles.webChartFallback}>
-          {sorted.map(item => (
-            <View key={item.name} style={styles.webChartRow}>
-              <View style={[styles.webLegendDot, { backgroundColor: item.color }]} />
-              <Text
-                style={[
-                  styles.webChartLabel,
-                  { color: isDark ? colors.textSecondaryDark : colors.textSecondary }
-                ]}
-                numberOfLines={1}
-              >
-                {item.name}
-              </Text>
-              <Text style={[styles.webChartValue, { color: isDark ? colors.textDark : colors.text }]}>
-                {total > 0 ? `${Math.round((item.value / total) * 100)}%` : '0%'}
-              </Text>
-            </View>
-          ))}
-          <Text style={[styles.webChartNote, { color: isDark ? colors.textSecondaryDark : colors.textSecondary }]}>
-            Charts are not available on web yet.
-          </Text>
-        </View>
-      );
-    }
-
-    return (
-      <WebView
-        source={{ html: pieChartHtml }}
-        style={styles.chart}
-        scrollEnabled={false}
-        showsVerticalScrollIndicator={false}
-        showsHorizontalScrollIndicator={false}
-      />
-    );
-  };
-
-  const renderDailyChart = () => {
-    if (Platform.OS === 'web') {
-      const max = Math.max(0, ...chartData.dailyData.map(item => Number(item[1]) || 0));
-
-      return (
-        <View style={styles.webChartFallback}>
-          {chartData.dailyData.map(([label, value]) => {
-            const amount = Number(value) || 0;
-            const pct = max > 0 ? Math.max(0, Math.min(100, (amount / max) * 100)) : 0;
-
-            return (
-              <View key={label} style={styles.webBarRow}>
-                <Text
-                  style={[
-                    styles.webBarLabel,
-                    { color: isDark ? colors.textSecondaryDark : colors.textSecondary }
-                  ]}
-                  numberOfLines={1}
-                >
-                  {label}
-                </Text>
-                <View style={[styles.webBarTrack, { backgroundColor: isDark ? colors.borderDark : colors.border }]}>
-                  <View style={[styles.webBarFill, { width: `${pct}%` }]} />
-                </View>
-                <Text style={[styles.webBarValue, { color: isDark ? colors.textDark : colors.text }]}>
-                  {Math.round(amount)}
-                </Text>
-              </View>
-            );
-          })}
-          <Text style={[styles.webChartNote, { color: isDark ? colors.textSecondaryDark : colors.textSecondary }]}>
-            Charts are not available on web yet.
-          </Text>
-        </View>
-      );
-    }
-
-    return (
-      <WebView
-        source={{ html: barChartHtml }}
-        style={styles.chart}
-        scrollEnabled={false}
-        showsVerticalScrollIndicator={false}
-        showsHorizontalScrollIndicator={false}
-      />
-    );
-  };
 
   if (loading) {
     return (
@@ -234,6 +63,11 @@ export default function AnalyticsScreen() {
         <View style={styles.content}>
           {chartData.categoryData.length > 0 ? (
             <>
+              {Platform.OS === 'web' && (
+                <Text style={[styles.webNote, { color: isDark ? colors.textSecondaryDark : colors.textSecondary }]}>
+                  Interactive charts aren’t available on web yet.
+                </Text>
+              )}
               <View style={[
                 styles.chartCard,
                 {
@@ -245,7 +79,7 @@ export default function AnalyticsScreen() {
                 <Text style={[styles.chartTitle, { color: isDark ? colors.textDark : colors.text }]}>
                   Spending by Category
                 </Text>
-                {renderCategoryChart()}
+                <CategoryChart data={chartData.categoryData} isDark={isDark} />
               </View>
 
               <View style={[
@@ -259,7 +93,7 @@ export default function AnalyticsScreen() {
                 <Text style={[styles.chartTitle, { color: isDark ? colors.textDark : colors.text }]}>
                   Daily Spending (Last 7 Days)
                 </Text>
-                {renderDailyChart()}
+                <DailyChart data={chartData.dailyData} isDark={isDark} />
               </View>
 
               <View style={[
@@ -326,6 +160,10 @@ const styles = StyleSheet.create({
   content: {
     padding: spacing.lg,
   },
+  webNote: {
+    ...typography.caption,
+    marginBottom: spacing.md,
+  },
   chartCard: {
     borderWidth: 1,
     borderRadius: borderRadius.lg,
@@ -335,64 +173,6 @@ const styles = StyleSheet.create({
   chartTitle: {
     ...typography.h3,
     marginBottom: spacing.md,
-  },
-  chart: {
-    height: 300,
-    backgroundColor: 'transparent',
-  },
-  webChartFallback: {
-    paddingVertical: spacing.sm,
-  },
-  webChartRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: spacing.xs,
-  },
-  webLegendDot: {
-    width: 10,
-    height: 10,
-    borderRadius: 5,
-    marginRight: spacing.sm,
-  },
-  webChartLabel: {
-    ...typography.bodySmall,
-    flex: 1,
-    marginRight: spacing.sm,
-  },
-  webChartValue: {
-    ...typography.bodySmall,
-    fontWeight: '600',
-  },
-  webChartNote: {
-    ...typography.caption,
-    marginTop: spacing.sm,
-  },
-  webBarRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: spacing.xs,
-  },
-  webBarLabel: {
-    ...typography.caption,
-    width: 70,
-    marginRight: spacing.sm,
-  },
-  webBarTrack: {
-    flex: 1,
-    height: 10,
-    borderRadius: 999,
-    overflow: 'hidden',
-    marginRight: spacing.sm,
-  },
-  webBarFill: {
-    height: '100%',
-    backgroundColor: colors.primary,
-  },
-  webBarValue: {
-    ...typography.caption,
-    width: 48,
-    textAlign: 'right',
-    fontWeight: '600',
   },
   insightsCard: {
     borderWidth: 1,

@@ -36,11 +36,17 @@ Guard `WebView` usage by platform and provide a web-safe fallback:
 - The warning only appears when `chartData.categoryData.length > 0` (the branch that renders the charts). For empty data, the empty state is shown and no warning appears.
 
 ## Implementation notes
-- Implemented a platform guard in `app/(tabs)/analytics.tsx`.
-  - On `web`, the screen now renders a lightweight, web-safe fallback (a simple list for category breakdown + bar-style rows for daily totals) instead of rendering the `WebView` stubs.
-  - On `ios`/`android`, the existing ECharts-in-WebView rendering remains unchanged.
+- Implemented a web/native split for chart rendering.
+  - `components/analytics/AnalyticsCharts.web.tsx` renders a web-safe fallback.
+  - `components/analytics/AnalyticsCharts.native.tsx` keeps the existing ECharts-in-WebView rendering for iOS/Android.
+  - `components/analytics/AnalyticsCharts.tsx` selects the correct implementation at runtime.
+- `app/(tabs)/analytics.tsx` now renders `<CategoryChart />` and `<DailyChart />` instead of using `WebView` directly.
 - Also fixed a minor mutation bug by changing `chartData.categoryData.sort(...)` to `chartData.categoryData.slice().sort(...)` when computing “Top Category”.
+
+## Testing notes
+- No Jest/Vitest/Detox test harness was found in this repo (no `*.test.*`, `__tests__`, or test scripts in `package.json`).
 
 ## Test results
 - `npm run lint` (passes; warnings pre-existing in other files).
+- `npm run typecheck` (passes). The TS config excludes `supabase/functions/**` since those are Deno-based and not typecheckable with the app’s `tsconfig.json`.
 - Manual: opening `localhost:8081/analytics` no longer shows “React Native WebView does not support this platform.”; the analytics section shows the fallback breakdown instead.
