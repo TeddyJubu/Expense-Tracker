@@ -35,3 +35,12 @@ Guard `WebView` usage by platform and provide a web-safe fallback:
 - The current charts load ECharts via a remote CDN inside the WebView; on native devices with restricted network access/offline mode, the charts can also fail to render (blank). If we keep WebView, bundling the chart library locally would be more reliable.
 - The warning only appears when `chartData.categoryData.length > 0` (the branch that renders the charts). For empty data, the empty state is shown and no warning appears.
 
+## Implementation notes
+- Implemented a platform guard in `app/(tabs)/analytics.tsx`.
+  - On `web`, the screen now renders a lightweight, web-safe fallback (a simple list for category breakdown + bar-style rows for daily totals) instead of rendering the `WebView` stubs.
+  - On `ios`/`android`, the existing ECharts-in-WebView rendering remains unchanged.
+- Also fixed a minor mutation bug by changing `chartData.categoryData.sort(...)` to `chartData.categoryData.slice().sort(...)` when computing “Top Category”.
+
+## Test results
+- `npm run lint` (passes; warnings pre-existing in other files).
+- Manual: opening `localhost:8081/analytics` no longer shows “React Native WebView does not support this platform.”; the analytics section shows the fallback breakdown instead.

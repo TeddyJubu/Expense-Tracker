@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, ScrollView, useColorScheme, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, useColorScheme, ActivityIndicator, Platform } from 'react-native';
 import { useMemo } from 'react';
 import { colors, spacing, borderRadius, typography, shadows } from '@/constants/theme';
 import { useExpense } from '@/hooks/useExpense';
@@ -120,6 +120,96 @@ export default function AnalyticsScreen() {
     </html>
   `;
 
+  const renderCategoryChart = () => {
+    if (Platform.OS === 'web') {
+      const sorted = chartData.categoryData.slice().sort((a, b) => b.value - a.value);
+      const total = sorted.reduce((sum, item) => sum + item.value, 0);
+
+      return (
+        <View style={styles.webChartFallback}>
+          {sorted.map(item => (
+            <View key={item.name} style={styles.webChartRow}>
+              <View style={[styles.webLegendDot, { backgroundColor: item.color }]} />
+              <Text
+                style={[
+                  styles.webChartLabel,
+                  { color: isDark ? colors.textSecondaryDark : colors.textSecondary }
+                ]}
+                numberOfLines={1}
+              >
+                {item.name}
+              </Text>
+              <Text style={[styles.webChartValue, { color: isDark ? colors.textDark : colors.text }]}>
+                {total > 0 ? `${Math.round((item.value / total) * 100)}%` : '0%'}
+              </Text>
+            </View>
+          ))}
+          <Text style={[styles.webChartNote, { color: isDark ? colors.textSecondaryDark : colors.textSecondary }]}>
+            Charts are not available on web yet.
+          </Text>
+        </View>
+      );
+    }
+
+    return (
+      <WebView
+        source={{ html: pieChartHtml }}
+        style={styles.chart}
+        scrollEnabled={false}
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
+      />
+    );
+  };
+
+  const renderDailyChart = () => {
+    if (Platform.OS === 'web') {
+      const max = Math.max(0, ...chartData.dailyData.map(item => Number(item[1]) || 0));
+
+      return (
+        <View style={styles.webChartFallback}>
+          {chartData.dailyData.map(([label, value]) => {
+            const amount = Number(value) || 0;
+            const pct = max > 0 ? Math.max(0, Math.min(100, (amount / max) * 100)) : 0;
+
+            return (
+              <View key={label} style={styles.webBarRow}>
+                <Text
+                  style={[
+                    styles.webBarLabel,
+                    { color: isDark ? colors.textSecondaryDark : colors.textSecondary }
+                  ]}
+                  numberOfLines={1}
+                >
+                  {label}
+                </Text>
+                <View style={[styles.webBarTrack, { backgroundColor: isDark ? colors.borderDark : colors.border }]}>
+                  <View style={[styles.webBarFill, { width: `${pct}%` }]} />
+                </View>
+                <Text style={[styles.webBarValue, { color: isDark ? colors.textDark : colors.text }]}>
+                  {Math.round(amount)}
+                </Text>
+              </View>
+            );
+          })}
+          <Text style={[styles.webChartNote, { color: isDark ? colors.textSecondaryDark : colors.textSecondary }]}>
+            Charts are not available on web yet.
+          </Text>
+        </View>
+      );
+    }
+
+    return (
+      <WebView
+        source={{ html: barChartHtml }}
+        style={styles.chart}
+        scrollEnabled={false}
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
+      />
+    );
+  };
+
   if (loading) {
     return (
       <View style={[styles.loadingContainer, { backgroundColor: isDark ? colors.backgroundDark : colors.background }]}>
@@ -155,13 +245,7 @@ export default function AnalyticsScreen() {
                 <Text style={[styles.chartTitle, { color: isDark ? colors.textDark : colors.text }]}>
                   Spending by Category
                 </Text>
-                <WebView
-                  source={{ html: pieChartHtml }}
-                  style={styles.chart}
-                  scrollEnabled={false}
-                  showsVerticalScrollIndicator={false}
-                  showsHorizontalScrollIndicator={false}
-                />
+                {renderCategoryChart()}
               </View>
 
               <View style={[
@@ -175,13 +259,7 @@ export default function AnalyticsScreen() {
                 <Text style={[styles.chartTitle, { color: isDark ? colors.textDark : colors.text }]}>
                   Daily Spending (Last 7 Days)
                 </Text>
-                <WebView
-                  source={{ html: barChartHtml }}
-                  style={styles.chart}
-                  scrollEnabled={false}
-                  showsVerticalScrollIndicator={false}
-                  showsHorizontalScrollIndicator={false}
-                />
+                {renderDailyChart()}
               </View>
 
               <View style={[
@@ -200,7 +278,7 @@ export default function AnalyticsScreen() {
                     Top Category
                   </Text>
                   <Text style={[styles.insightValue, { color: isDark ? colors.textDark : colors.text }]}>
-                    {chartData.categoryData.sort((a, b) => b.value - a.value)[0]?.name || 'N/A'}
+                    {chartData.categoryData.slice().sort((a, b) => b.value - a.value)[0]?.name || 'N/A'}
                   </Text>
                 </View>
                 <View style={styles.insightItem}>
@@ -261,6 +339,60 @@ const styles = StyleSheet.create({
   chart: {
     height: 300,
     backgroundColor: 'transparent',
+  },
+  webChartFallback: {
+    paddingVertical: spacing.sm,
+  },
+  webChartRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: spacing.xs,
+  },
+  webLegendDot: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    marginRight: spacing.sm,
+  },
+  webChartLabel: {
+    ...typography.bodySmall,
+    flex: 1,
+    marginRight: spacing.sm,
+  },
+  webChartValue: {
+    ...typography.bodySmall,
+    fontWeight: '600',
+  },
+  webChartNote: {
+    ...typography.caption,
+    marginTop: spacing.sm,
+  },
+  webBarRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: spacing.xs,
+  },
+  webBarLabel: {
+    ...typography.caption,
+    width: 70,
+    marginRight: spacing.sm,
+  },
+  webBarTrack: {
+    flex: 1,
+    height: 10,
+    borderRadius: 999,
+    overflow: 'hidden',
+    marginRight: spacing.sm,
+  },
+  webBarFill: {
+    height: '100%',
+    backgroundColor: colors.primary,
+  },
+  webBarValue: {
+    ...typography.caption,
+    width: 48,
+    textAlign: 'right',
+    fontWeight: '600',
   },
   insightsCard: {
     borderWidth: 1,
